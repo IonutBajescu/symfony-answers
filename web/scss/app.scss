@@ -1,0 +1,21 @@
+@import "colors";
+
+.container {
+  width: 60%;
+  margin: 0 auto;
+
+  &.main {
+    margin-top: 40px;
+  }
+}
+
+.search-widget .text-right {
+  margin-top: 5px;
+
+  a {
+    margin-left: 15px;
+  }
+}
+
+@import "components/button";
+@import "components/form";

@@ -1,0 +1,21 @@
+{
+  "name": "oh, pls",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.7",
+    "react": "~0.14.2",
+    "react-router": "rackt/react-router#~v1.0.0-rc4",
+    "bootstrap": "~3.3.5",
+    "jquery": "~2.1.4",
+    "underscore": "~1.8.3"
+  }
+}
