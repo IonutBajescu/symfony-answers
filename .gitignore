@@ -11,3 +11,4 @@
 /web/bundles/
 node_modules
 web/bower_components
+.idea

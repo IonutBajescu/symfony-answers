@@ -123,7 +123,8 @@ class Answer implements \JsonSerializable
             'id' => $this->id,
             'title' => $this->title,
             'content' => $this->content,
-            'createdAt' => $this->createdAt
+            'createdAt' => $this->createdAt,
+            'comments' => $this->comments
         ];
     }
 }

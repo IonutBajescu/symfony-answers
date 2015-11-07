@@ -85,11 +85,125 @@ const CreateAnswer = React.createClass({
    }
 });
 
+const Attachments = React.createClass({
+
+    showAttachment(attachment) {
+        return (
+            <div className="attachment">
+                {attachment.title}
+            </div>
+        );
+    },
+
+    render() {
+
+        return (
+            <div class="attachments">
+                {/**this.props.attachments.map(this.showAttachment)**/}
+            </div>
+        )
+    }
+});
+
+
+const AddAttachment = React.createClass({
+    render() {
+        return (
+            <div>
+                @todo
+            </div>
+        )
+    }
+});
+
+const AddComment = React.createClass({
+    getInitialProps() {
+        return {
+            answer: {},
+            show: {}
+        }
+    },
+
+    render() {
+        return (
+            <div className={'row ' + (this.props.show ? '' : 'hidden')}>
+                <div className="col-sm-6">
+                    <h1>Create comment</h1>
+                    <textarea className="form-control"></textarea>
+
+                    <AddAttachment to="{this.props.answer}"></AddAttachment>
+
+                    <button className="btn btn-primary pull-right">Save</button>
+                </div>
+            </div>
+        )
+    }
+});
+
+const Comments = React.createClass({
+
+    contextTypes: {
+        location: React.PropTypes.object.isRequired
+    },
+
+    getInitialState() {
+        return {
+            showAddComment: false
+        }
+    },
+
+    getInitialProps() {
+        return {
+            answer: {
+                comments: []
+            }
+        }
+    },
+
+    showComment(comment) {
+        return (
+            <div className="comment">
+                <div className="content">
+                    {comment.content}
+                </div>
+
+                <Attachments attachments={comment.files}/>
+            </div>
+        )
+    },
+
+    toggleShowAddComment() {
+        this.setState({
+            showAddComment: !this.state.showAddComment
+        });
+    },
+
+    render() {
+
+        return (
+            <div>
+                <div>
+                    <h1>Comments</h1>
+                    <a onClick={this.toggleShowAddComment}>add comment</a>
+                </div>
+
+                <AddComment answer={this.props.answer} show={this.state.showAddComment}/>
+
+
+                <div className="comments">
+                    {_.map(this.props.answer.comments, this.showComment)}
+                </div>
+            </div>
+
+        )
+    }
+});
+
 const ShowAnswer = React.createClass({
 
     getInitialState() {
         return {
-            answer: {}
+            answer: {comments: []}
         }
     },
 
@@ -100,9 +214,16 @@ const ShowAnswer = React.createClass({
     },
 
     render() {
+
         return (
-            <div>
+            <div className="answer">
                 <h1>{this.state.answer.title}</h1>
+
+                <div className="content">
+                    {this.state.answer.content}
+                </div>
+
+                <Comments answer={this.state.answer}/>
             </div>
         )
     }
