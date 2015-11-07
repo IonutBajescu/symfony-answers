@@ -26,7 +26,7 @@ class AnswerController extends AbstractController
      */
     public function store(Request $request)
     {
-        $answer = new Answer($request->get('title'), $request->get('content'), Carbon::now());
+        $answer = new Answer($request->get('title'), $request->get('content'));
         $this->em()->persist($answer);
         $this->em()->flush();
 

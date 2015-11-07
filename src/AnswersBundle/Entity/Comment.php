@@ -2,8 +2,8 @@
 
 namespace AnswersBundle\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 
 /**
@@ -30,9 +30,22 @@ class Comment implements \JsonSerializable
     protected $content;
 
     /**
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
     protected $createdAt;
+
+    /**
+     * Comment constructor.
+     *
+     * @param  string  $content
+     * @param  Answer  $answer
+     */
+    public function __construct($content, Answer $answer)
+    {
+        $this->content = $content;
+        $this->answer = $answer;
+    }
 
 
     /**

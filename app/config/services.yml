@@ -4,6 +4,13 @@ parameters:
 #    parameter_name: value
 
 services:
+  gedmo.listener.timestampable:
+    class: Gedmo\Timestampable\TimestampableListener
+    tags:
+        - { name: doctrine.event_subscriber, connection: default }
+    calls:
+        - [ setAnnotationReader, [ @annotation_reader ] ]
+
   app.exceptions_controller:
     class: AnswersBundle\Controller\ExceptionsController
     arguments: ["@twig", 1, "@kernel"]

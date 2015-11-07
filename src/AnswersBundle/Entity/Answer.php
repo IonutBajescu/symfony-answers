@@ -4,6 +4,9 @@ namespace AnswersBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
+
 
 /**
  * @ORM\Entity
@@ -29,20 +32,21 @@ class Answer implements \JsonSerializable
     protected $content;
 
     /**
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
     protected $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="answer")
+     * @var PersistentCollection
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="answer", fetch="EAGER")
      */
     protected $comments;
 
-    public function __construct($title, $content, DateTime $createdAt)
+    public function __construct($title, $content)
     {
         $this->title = $title;
         $this->content = $content;
-        $this->createdAt = $createdAt;
     }
 
     /**
@@ -124,7 +128,7 @@ class Answer implements \JsonSerializable
             'title' => $this->title,
             'content' => $this->content,
             'createdAt' => $this->createdAt,
-            'comments' => $this->comments
+            'comments' => $this->comments->getValues()
         ];
     }
 }

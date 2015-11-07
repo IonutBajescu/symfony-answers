@@ -41,7 +41,7 @@ const AnswersList = React.createClass({
     }
 });
 
-const CreateAnswer = React.createClass({
+const AddAnswer = React.createClass({
     contextTypes: {
         history: React.PropTypes.object.isRequired
     },
@@ -117,6 +117,10 @@ const AddAttachment = React.createClass({
 });
 
 const AddComment = React.createClass({
+    contextTypes: {
+        history: React.PropTypes.object.isRequired
+    },
+
     getInitialProps() {
         return {
             answer: {},
@@ -129,14 +133,24 @@ const AddComment = React.createClass({
             <div className={'row ' + (this.props.show ? '' : 'hidden')}>
                 <div className="col-sm-6">
                     <h1>Create comment</h1>
-                    <textarea className="form-control"></textarea>
+                    <textarea className="form-control" ref="content"></textarea>
 
-                    <AddAttachment to="{this.props.answer}"></AddAttachment>
+                    <AddAttachment to={this.props.answer} />
 
-                    <button className="btn btn-primary pull-right">Save</button>
+                    <button onClick={this.submit} className="btn btn-primary pull-right">Save</button>
                 </div>
             </div>
         )
+    },
+
+    submit() {
+        $.post('api/answers/' + this.props.answer.id + '/comments', {
+            content: this.refs.content.value
+        })
+        .success(() => {
+            this.context.history.pushState(null, 'answers/' + this.props.answer.id);
+            this.props.answer.refresh();
+        });
     }
 });
 
@@ -161,6 +175,7 @@ const Comments = React.createClass({
     },
 
     showComment(comment) {
+        console.log(comment);
         return (
             <div className="comment">
                 <div className="content">
@@ -209,6 +224,7 @@ const ShowAnswer = React.createClass({
 
     componentDidMount() {
         $.getJSON('api/answers/' + this.props.params.id, (response) => {
+            response.answer.refresh = this.componentDidMount.bind(this);
             this.setState({answer: response.answer})
         })
     },
@@ -265,7 +281,7 @@ ReactDOM.render((
        <Route path="/" component={App}>
            <Route path="answers" component={Answers}>
                 <IndexRoute component={AnswersList} />
-                <Route path="new" component={CreateAnswer} />
+                <Route path="new" component={AddAnswer} />
                 <Route path=":id" component={ShowAnswer} />
             </Route>
 

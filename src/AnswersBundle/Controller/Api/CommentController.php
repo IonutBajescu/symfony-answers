@@ -2,21 +2,33 @@
 
 namespace AnswersBundle\Controller\Api;
 
-use AnswersBundle\Entity\Comment;
+use AnswersBundle\Controller\AbstractController;
 use AnswersBundle\Entity\Answer;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AnswersBundle\Entity\Comment;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class CommentController extends Controller
+/**
+ * @Route("api/answers/{id}/comments")
+ * @ParamConverter("answer", class="AnswersBundle:Answer")
+ */
+class CommentController extends AbstractController
 {
 
-    public function index()
+    /**
+     * @Route("")
+     * @Method({"POST"})
+     */
+    public function store(Answer $answer, Request $request)
     {
+        $comment = new Comment($request->get('content'), $answer);
 
-    }
+        $this->em()->persist($comment);
+        $this->em()->flush();
 
-    public function store(Request $request)
-    {
-        new Answer();
+        return new JsonResponse(compact('comment'));
     }
 }
