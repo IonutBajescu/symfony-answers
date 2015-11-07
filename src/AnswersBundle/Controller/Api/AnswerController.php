@@ -6,6 +6,7 @@ use AnswersBundle\Controller\AbstractController;
 use AnswersBundle\Entity\Answer;
 use Carbon\Carbon;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,6 +30,15 @@ class AnswerController extends AbstractController
         $this->em()->persist($answer);
         $this->em()->flush();
 
+        return new JsonResponse(compact('answer'));
+    }
+
+    /**
+     * @Route("/{id}")
+     * @ParamConverter("answer", class="AnswersBundle:Answer")
+     */
+    public function show(Answer $answer)
+    {
         return new JsonResponse(compact('answer'));
     }
 }

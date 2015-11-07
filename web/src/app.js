@@ -3,6 +3,7 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 var Link = ReactRouter.Link;
 var Route = ReactRouter.Route;
+var IndexRoute = ReactRouter.IndexRoute;
 var Router = ReactRouter.Router;
 var redirect = (to) => history.pushState(null, null, to);
 
@@ -20,6 +21,17 @@ const App = React.createClass({
 
 
 const Answers = React.createClass({
+    render() {
+        return (
+            <div>
+                {this.props.children}
+            </div>
+        )
+    }
+});
+
+
+const AnswersList = React.createClass({
     render() {
         return (
             <div>
@@ -74,8 +86,25 @@ const CreateAnswer = React.createClass({
 });
 
 const ShowAnswer = React.createClass({
-    show() {
 
+    getInitialState() {
+        return {
+            answer: {}
+        }
+    },
+
+    componentDidMount() {
+        $.getJSON('api/answers/' + this.props.params.id, (response) => {
+            this.setState({answer: response.answer})
+        })
+    },
+
+    render() {
+        return (
+            <div>
+                <h1>{this.state.answer.title}</h1>
+            </div>
+        )
     }
 });
 
@@ -113,7 +142,12 @@ const NoMatch = React.createClass({
 ReactDOM.render((
    <Router history={createBrowserHistory()}>
        <Route path="/" component={App}>
-           <Route path="answers/new" component={CreateAnswer} />
+           <Route path="answers" component={Answers}>
+                <IndexRoute component={AnswersList} />
+                <Route path="new" component={CreateAnswer} />
+                <Route path=":id" component={ShowAnswer} />
+            </Route>
+
            <Route path="*" component={NoMatch}/>
        </Route>
    </Router>
